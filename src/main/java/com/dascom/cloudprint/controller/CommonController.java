@@ -49,7 +49,7 @@ public class CommonController {
 		PoolBatchJudgeDto dto=new PoolBatchJudgeDto();
 		boolean result=true;
 		Gson gson=new Gson();
-
+		//分支1修改
 		/*if(poolsJson==null || poolsJson.equals("")){
 			dto.setErrorReason("Parameter poolsJson is null!");
 			dto.setFailureNumbers(failureNumbers);
