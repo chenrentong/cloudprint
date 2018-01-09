@@ -38,6 +38,7 @@ public class IndexController {
 		Logg.writeDebugLog("进入欢迎页,welcome");
 		//aaa
 		//撒啊啊
+		//分支
 		return "/welcome";
 	}
 	
