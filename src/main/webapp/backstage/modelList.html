@@ -1,0 +1,244 @@
+<!DOCTYPE HTML>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit|ie-comp|ie-stand">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+		<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+		<link rel="stylesheet" type="text/css" href="css/H-ui.min.css" />
+		<link rel="stylesheet" type="text/css" href="css/H-ui.admin.css" />
+		<link rel="stylesheet" type="text/css" href="iconfont/1.0.8/iconfont.css" />
+		<link rel="stylesheet" href="css/modelList.css" />
+
+		<title>权限管理</title>
+	</head>
+
+	<body>
+		<nav class="breadcrumb">
+			<i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 产品管理 <span class="c-gray en">&gt;</span> 打印机型号管理
+			<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新"><i class="Hui-iconfont">&#xe68f;</i></a>
+		</nav>
+		<div class="page-container">
+			<div class="text-c clearfix">
+				<p class="Huiform f-l" style="width: 135px;height: 25px;border: 1px solid gainsboro;">页面刷新时间：10s</p>
+				<!--<form class="Huiform f-l" method="post" action="" target="_self">
+					<!--<input type="text" class="input-text" style="width:120px;" placeholder="" name="key">
+				</form>-->
+				<div style=" margin-right:42%">
+				<form class="Huiform f-r" method="post" action="" target="_self">
+					<input type="text" class="input-text" style="width:250px;" placeholder="打印机序号" name="key">
+					<button type="submit" class="btn btn-success" name=""><i class="Hui-iconfont">&#xe665;</i> 搜打印机</button>
+				</form>
+				</div>
+			</div>
+		<div class="cl pd-5 bg-1 bk-gray mt-20">
+			<span class="l">
+				<a href="javascript:;" onClick="" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+				<a href="javascript:;" onClick="" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加打印机</a>
+			</span> 
+			<span class="r">打印机数量：<strong>15</strong> 台</span> 
+		</div>
+		
+		<!--打印机型号-->
+		<div class="row model clearfix">
+			<div class="col-12 model-title">
+			  <h3>云打印列表</h3>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+               </ul>
+			</div>
+			
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4  col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    
+                       <span>别名:<span></span><p class="details">修改</p></span>
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                       
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                       
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                       
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                       
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                       
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+			<div class="col-2 col-md-2 col-sm-4 col-xs-8 modal-list">
+				<ul class="modal-ul">
+                    <li><span>序列号:</span><span class="unique"></span></li>
+                    <li><span>型号:</span><span></span><p class="details">详情</p></li>
+                    <li>
+                    	<span>别名:<span></span><p class="details">修改</p></span>
+                       
+                    </li>
+                    <li><span>主状态:</span> <span class="alive"></span><p class="details delete">删除</p></li>
+                    <li><span>子状态:</span> <span class="alive"></span></li>
+                    <li><span>设备注册时间:</span> <span class="alive"></span></li>
+                    <li><span>设备编号:</span> <span class="alive"></span></li>
+                   
+                </ul>
+			</div>
+		</div>
+		
+		<!--页数-->
+		<div class="row page">
+			 <div class="col-6 col-offset-5 printers-page">
+		        <div class="page">
+		            <span>上一页</span>
+		            <div class="pageNum">
+		                <a href="" class="onepage">1</a>
+		                <a href="">2</a>
+		            </div>
+		            <span>下一页</span>
+		        </div>
+    		</div>
+		</div>
+		
+		</div>
+		
+	</body>
+</html>

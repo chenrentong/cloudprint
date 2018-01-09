@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"    
+ xmlns:context="http://www.springframework.org/schema/context"    
+ xmlns:p="http://www.springframework.org/schema/p"    
+ xmlns:mvc="http://www.springframework.org/schema/mvc"    
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"    
+ xsi:schemaLocation="http://www.springframework.org/schema/beans    
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd    
+      http://www.springframework.org/schema/context    
+      http://www.springframework.org/schema/context/spring-context.xsd    
+      http://www.springframework.org/schema/mvc    
+      http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">  
+    <!-- 注解扫描包 -->  
+    <context:component-scan base-package="com.dascom.cloudprint" />
+    <!-- 开启注解 -->  
+    <mvc:annotation-driven/>  
+      
+    <bean id="requestMappingHandlerMapping" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+    <bean id="requestMappingHandlerAdapter" class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter"/>
+
+     
+     <!-- 配置静态资源,不被DispatherServlet处理 -->
+	<mvc:resources location="/" mapping="/**"/>   
+      
+  
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+        <property name="prefix" value="/WEB-INF/jsp"></property>  
+        <property name="suffix" value=".jsp"></property>  
+    </bean>  
+      
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">  
+          <property name="defaultEncoding" value="utf-8" />  
+          <property name="maxUploadSize" value="10485760000" />  
+          <property name="maxInMemorySize" value="40960" />  
+    </bean>  
+    
+    <bean id="mappingJacksonHttpMessageConverter" class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+    
+	<!-- shiro为集成springMvc 拦截异常，使用注解时无权限的跳转 -->
+	<bean
+		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+		<property name="exceptionMappings">
+			<props>
+				<!-- 这里你可以根据需要定义N多个错误异常转发 -->
+				<!-- 没有访问权限 -->
+				<prop key="org.apache.shiro.authz.UnauthorizedException">redirect:error2.do</prop>
+				<!-- 授权异常 -->
+				<prop key="org.apache.shiro.authz.UnauthenticatedException">redirect:error2.do</prop>
+				<!-- 不合法参数 -->
+				<prop key="java.lang.IllegalArgumentException">redirect:error2.do</prop>
+				<!-- json请求失败 -->
+				<prop key="org.springframework.http.converter.HttpMessageNotReadableException">redirect:error2.do</prop>
+				<!-- 字段转换错误 -->
+				<prop key="org.springframework.core.convert.ConversionException">redirect:deviceError</prop>
+				<!-- 无法连接数据库 -->
+				<prop key="org.springframework.dao.DataAccessResourceFailureException">redirect:deviceError</prop>
+				<!-- 数据库运行时异常 -->
+				<prop key="org.springframework.dao.DataAccessException">redirect:deviceError</prop>
+				<!-- 没权限异常 -->
+				<prop key="org.springframework.data.mongodb.UncategorizedMongoDbException">redirect:deviceError</prop>
+				<!-- 其他错误 -->
+				<prop key="java.lang.Exception">redirect:deviceError</prop> 
+			</props>
+		</property>
+	</bean>
+ </beans>

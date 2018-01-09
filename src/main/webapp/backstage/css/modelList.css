@@ -1,0 +1,151 @@
+.model{
+	padding-bottom: 45px;
+	padding-left:40px;
+	padding-right:40px;
+}
+.model .modal-list {
+	color:white;
+	padding: 15px;
+}
+.model-title {
+	text-align: center;
+	padding: 10px 0px;
+	
+}
+.model-title h3 {
+	font-weight: 600;
+	color: darkslategrey;
+}
+.modal-ul{ 
+	
+	width: 85%;
+	padding: 20px;
+	margin: auto;
+	background: black;
+  
+    background-color: #333;
+    color: white;
+    border-radius: 4px;
+}
+
+.modal-list .modal-ul li{
+	height: 30px;
+    line-height: 30px;
+    position: relative;
+}
+
+.model-title ul li span {
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 5px;
+}
+
+.model-title  ul li span:first-child {
+    width: 45px;
+    text-align: right;
+    margin-left: 0;
+    font-weight: 600;
+    color: #E0E0E0;
+
+}
+ .details {
+	width: 38px;
+	height: 18px;
+	line-height: 18px;
+	text-align: center;
+	font-size: 12px;
+	background-color: #0a6999;
+	position: absolute;
+	top:5px;
+	right: 0px;
+}
+
+
+/*编辑别名*/
+.edit-alias-box {
+    display: inline-block;
+    height: 30px;
+    line-height: 30px;
+    position: relative;
+}
+
+.edit-alias-box input {
+    width:164px;
+    text-indent: 5px;
+    overflow: hidden;
+    border: none;
+    background-color: #333;
+  
+    color: white;
+    font-size: 12px;
+    height: 20px;
+    padding: 2px 0;
+}
+
+.edit-alias-box .fa-pencil-square-o {
+    float: right;
+    color: red;
+    font-size: 24px;
+    margin-left: 10px;
+
+}
+/*图标*/
+.fa-pencil-square-o:hover {
+    color: #ff081b;
+}
+
+
+/* 修改提示*/
+.edit-note-text {
+    width: 125px;
+    position: absolute;
+    top: 50%;
+    left: 166px;
+    font-size: 12px;
+    margin-top: -7px;
+    color: #fff;
+    background-color: rgba(0, 0, 0, .8);
+    z-index: 9;
+    padding: 0 5px;
+    line-height: 16px;
+    border-radius: 4px;
+}
+
+
+
+/*----页数-----*/
+.printers-page {
+  
+}
+.page{
+    width: 100%;
+    height: 45px;
+    margin-top: 20px;
+    text-align: right;
+}
+.page span{
+    display: inline-block;
+    width: 65px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    border: #CCC solid 1px;
+}
+
+.pageNum{
+    display: inline-block;
+}
+
+.pageNum a {
+    display: inline-block;
+    line-height:28px;
+    width: 40px;
+    text-align: center;
+    border: #CCC solid 1px;
+    font: 18px/35px Verdana;
+    text-decoration: none;
+    margin-left: 8px;
+    background: #FFF
+}
+.pageNum .onepage {
+    background: #0097de;

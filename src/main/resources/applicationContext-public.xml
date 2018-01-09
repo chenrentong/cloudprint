@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:util="http://www.springframework.org/schema/util" 
+	xmlns:p="http://www.springframework.org/schema/p"
+	xsi:schemaLocation="
+            http://www.springframework.org/schema/beans
+            http://www.springframework.org/schema/beans/spring-beans.xsd
+            http://www.springframework.org/schema/context
+            http://www.springframework.org/schema/context/spring-context.xsd
+            http://www.springframework.org/schema/data/mongo
+			http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+            http://www.springframework.org/schema/tx
+            http://www.springframework.org/schema/tx/spring-tx.xsd
+            http://www.springframework.org/schema/aop
+            http://www.springframework.org/schema/aop/spring-aop.xsd
+            http://www.springframework.org/schema/util
+            http://www.springframework.org/schema/util/spring-util.xsd">
+	 <!-- 加载mongodb的属性配置文件 -->
+	<context:property-placeholder location="classpath:config.properties" /> 
+	
+	<!-- 数据库地址 -->
+	<mongo:mongo-client id="local" host="${mongo.host.local}" port="${mongo.port}"  />
+	<!-- <mongo:mongo-client id="local" host="${mongo.host.local}" port="${mongo.port}" credentials="${mongo.username}:${mongo.password}@${mongo.dbname_cloud_device}" /> -->
+	<!-- credentials=用户名:密码@数据库 -->
+ 	<mongo:mongo-client id="aliyun" host="${mongo.host.aliyun}" port="${mongo.port}"  credentials="${mongo.username.aliyun}:${mongo.password.aliyun}@${mongo.dbname_cloud_device}"/>
+	<mongo:mongo-client id="tengxun" host="${mongo.host.tengxun}" port="${mongo.port}"  />
+	
+	<!-- 一个库一个工厂 -->
+	<mongo:db-factory id="deviceFactory" mongo-ref="local" dbname="${mongo.dbname_cloud_device}"/>	
+	<mongo:db-factory id="authFactory" mongo-ref="local" dbname="${mongo.dbname_auth}"/>
+	<mongo:db-factory id="logFactory" mongo-ref="local" dbname="${mongo.dbname_log}"/>
+	
+	<!-- 一个库一个映射后转化上下文 -->
+	<bean id="deviceMappingContext"  
+    class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />  
+    
+    <bean id="authMappingContext"  
+    class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />  
+    
+     <bean id="logMappingContext"  
+    class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />  
+   
+	<!--    去除_class属性插入 -->
+	 <bean id="defaultMongoTypeMapper"  
+	    class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">  
+	    <constructor-arg name="typeKey"><null/></constructor-arg>  
+	 </bean>  
+	   
+	 <bean id="deviceMappingMongoConverter"  
+	    class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">  
+	    <constructor-arg name="mongoDbFactory" ref="deviceFactory" />  
+	    <constructor-arg name="mappingContext" ref="deviceMappingContext" />  
+	    <property name="typeMapper" ref="defaultMongoTypeMapper" />  
+	 </bean> 
+	 
+	 <bean id="authMappingMongoConverter"  
+	    class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">  
+	    <constructor-arg name="mongoDbFactory" ref="authFactory" />  
+	    <constructor-arg name="mappingContext" ref="authMappingContext" />  
+	    <property name="typeMapper" ref="defaultMongoTypeMapper" />  
+	 </bean> 
+	 
+	 <bean id="logMappingMongoConverter"  
+	    class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">  
+	    <constructor-arg name="mongoDbFactory" ref="logFactory" />  
+	    <constructor-arg name="mappingContext" ref="logMappingContext" />  
+	    <property name="typeMapper" ref="defaultMongoTypeMapper" />  
+	 </bean> 
+	  		
+	<!--Template-->
+	<bean id="cloudDeviceTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="deviceFactory"/>
+		<constructor-arg name="mongoConverter" ref="deviceMappingMongoConverter" /> 
+	</bean>
+	
+	<bean id="authTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="authFactory"/>
+		<constructor-arg name="mongoConverter" ref="authMappingMongoConverter" /> 
+		
+	</bean>
+	<bean id="logTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="logFactory"/>
+		<constructor-arg name="mongoConverter" ref="logMappingMongoConverter" /> 
+	</bean>
+	
+	<!-- 实例化dao -->
+	<!-- 设备dao -->
+	<bean id="collectionPrintersDao" class="com.dascom.cloudprint.dao.CollectionPrintersDao" >
+		 <property name="mongoTemplate" ref="cloudDeviceTemplate"></property>   
+	</bean>
+	<bean id="collectionPrintersPoolDao" class="com.dascom.cloudprint.dao.CollectionPrintersPoolDao" >
+		 <property name="mongoTemplate" ref="cloudDeviceTemplate"></property>   
+	</bean>
+	<!-- 用户dao -->
+	<bean id="collectionUsersDao" class="com.dascom.cloudprint.dao.CollectionUsersDao" >
+		 <property name="mongoTemplate" ref="authTemplate"></property>   
+	</bean>
+	<bean id="collectionUsersOperationDao" class="com.dascom.cloudprint.dao.CollectionUsersOperationDao" >
+		 <property name="mongoTemplate" ref="authTemplate"></property>   
+	</bean>
+	<!-- 日志dao -->
+	<bean id="collectionLogDao" class="com.dascom.cloudprint.dao.CollectionLogsDao" >
+		 <property name="mongoTemplate" ref="logTemplate"></property>   
+	</bean>
+
+</beans>
