@@ -37,6 +37,7 @@ public class IndexController {
 	public String welcome(HttpServletRequest request ){
 		Logg.writeDebugLog("进入欢迎页,welcome");
 		//aaa
+		//撒啊啊
 		return "/welcome";
 	}
 	
