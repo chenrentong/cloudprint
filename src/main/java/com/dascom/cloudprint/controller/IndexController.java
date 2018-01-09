@@ -36,6 +36,7 @@ public class IndexController {
 	@RequestMapping("welcome")
 	public String welcome(HttpServletRequest request ){
 		Logg.writeDebugLog("进入欢迎页,welcome");
+		//aaa
 		return "/welcome";
 	}
 	
