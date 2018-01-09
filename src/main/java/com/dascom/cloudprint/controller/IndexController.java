@@ -40,7 +40,7 @@ public class IndexController {
 		//撒啊啊
 
 		//分
-
+		//oafenzhi
 		//主该
 
 		return "/welcome";
