@@ -50,6 +50,7 @@ public class CommonController {
 		boolean result=true;
 		Gson gson=new Gson();
 		//分支1修改
+		//分支1修改2
 		/*if(poolsJson==null || poolsJson.equals("")){
 			dto.setErrorReason("Parameter poolsJson is null!");
 			dto.setFailureNumbers(failureNumbers);
