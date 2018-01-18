@@ -108,6 +108,5 @@ public class CollectionUsersOperationService {
 		operation.setUser_name(user.getUser_name());
 		operation.setOperation_time(new Date());	
 		return insertOperation(operation);
-					
 	}
 }

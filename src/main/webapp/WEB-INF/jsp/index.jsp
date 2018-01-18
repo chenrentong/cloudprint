@@ -76,8 +76,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <dt><i class="Hui-iconfont">&#xe63e;</i> 云日志管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a data-href="cloudlogListByKey" data-title="日志列表" href="javascript:void(0)">日志列表</a></li>
-                  
+                    <li><a data-href="cloudlogListByKey" data-title="设备日志列表" href="javascript:void(0)">设备日志列表</a></li>
+                  	<li><a data-href="serverlogList?type=tcp" data-title="TCP日志列表" href="javascript:void(0)">TCP日志列表</a></li>
+                  	<li><a data-href="serverlogList?type=interface" data-title="接口日志列表" href="javascript:void(0)">接口日志列表</a></li>
                 </ul>
             </dd>
         </dl>
@@ -119,6 +120,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <!--请在下方写此页面业务相关的脚本-->
 <script type="text/javascript" src="<%=basePath %>/lib/jquery.contextmenu/jquery.contextmenu.r2.js"></script>
 <script type="text/javascript">
+	
+
     $(function(){
     	 //控制根据页面刷新一遍
     	 var  flag = window.localStorage.getItem("flag");

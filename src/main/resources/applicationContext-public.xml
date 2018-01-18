@@ -29,11 +29,16 @@
 	<!-- credentials=用户名:密码@数据库 -->
  	<mongo:mongo-client id="aliyun" host="${mongo.host.aliyun}" port="${mongo.port}"  credentials="${mongo.username.aliyun}:${mongo.password.aliyun}@${mongo.dbname_cloud_device}"/>
 	<mongo:mongo-client id="tengxun" host="${mongo.host.tengxun}" port="${mongo.port}"  />
+	<mongo:mongo-client id="serverlog" host="${mongo.host.serverlog}" port="${mongo.port}" credentials="${mongo.username.serverlog}:${mongo.password.serverlog}@${mongo.dbname_cloud_device}"/> 
+	
+	
+	
 	
 	<!-- 一个库一个工厂 -->
 	<mongo:db-factory id="deviceFactory" mongo-ref="local" dbname="${mongo.dbname_cloud_device}"/>	
 	<mongo:db-factory id="authFactory" mongo-ref="local" dbname="${mongo.dbname_auth}"/>
 	<mongo:db-factory id="logFactory" mongo-ref="local" dbname="${mongo.dbname_log}"/>
+	<mongo:db-factory id="serverlogFactory" mongo-ref="serverlog" dbname="${mongo.dbname_cloud_device}"/>
 	
 	<!-- 一个库一个映射后转化上下文 -->
 	<bean id="deviceMappingContext"  
@@ -44,7 +49,10 @@
     
      <bean id="logMappingContext"  
     class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />  
-   
+    
+   	 <bean id="serverlogMappingContext"  
+    class="org.springframework.data.mongodb.core.mapping.MongoMappingContext" />  
+    
 	<!--    去除_class属性插入 -->
 	 <bean id="defaultMongoTypeMapper"  
 	    class="org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper">  
@@ -71,6 +79,13 @@
 	    <constructor-arg name="mappingContext" ref="logMappingContext" />  
 	    <property name="typeMapper" ref="defaultMongoTypeMapper" />  
 	 </bean> 
+	 
+	 <bean id="serverlogMappingMongoConverter"  
+	    class="org.springframework.data.mongodb.core.convert.MappingMongoConverter">  
+	    <constructor-arg name="mongoDbFactory" ref="serverlogFactory" />  
+	    <constructor-arg name="mappingContext" ref="serverlogMappingContext" />  
+	    <property name="typeMapper" ref="defaultMongoTypeMapper" />  
+	 </bean> 
 	  		
 	<!--Template-->
 	<bean id="cloudDeviceTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
@@ -86,6 +101,10 @@
 	<bean id="logTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
 		<constructor-arg name="mongoDbFactory" ref="logFactory"/>
 		<constructor-arg name="mongoConverter" ref="logMappingMongoConverter" /> 
+	</bean>
+	<bean id="serverlogTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+		<constructor-arg name="mongoDbFactory" ref="serverlogFactory"/>
+		<constructor-arg name="mongoConverter" ref="serverlogMappingMongoConverter" /> 
 	</bean>
 	
 	<!-- 实例化dao -->
@@ -106,6 +125,10 @@
 	<!-- 日志dao -->
 	<bean id="collectionLogDao" class="com.dascom.cloudprint.dao.CollectionLogsDao" >
 		 <property name="mongoTemplate" ref="logTemplate"></property>   
+	</bean>
+	<!-- server日志 -->
+	<bean id="collectionServerLogDao" class="com.dascom.cloudprint.dao.CollectionTcpLogsDao" >
+		 <property name="mongoTemplate" ref="serverlogTemplate"></property>   
 	</bean>
 
 </beans>
