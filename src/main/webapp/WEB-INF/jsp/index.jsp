@@ -61,9 +61,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <dd>
                 <ul>
                     <li><a data-href="cloudprintListByKeyAndLine" data-title="设备列表" href="javascript:void(0)">设备列表</a></li>
-                    <li><a data-href="cloudprintPool" data-title="编号管理" href="javascript:void(0)">编号管理</a></li>
+                    <li><a data-href="cloudprintNumber" data-title="编号注册" href="javascript:void(0)">编号注册</a></li>
+                    <li><a data-href="cloudprintPool" data-title="编号池管理" href="javascript:void(0)">编号池管理</a></li>
                     <li><a data-href="machinePrint" data-title="设备打印" href="javascript:void(0)">设备打印</a></li>
-               
+               		<!-- <li><a data-href="projectManage" data-title="项目管理" href="javascript:void(0)">项目管理</a></li> -->
                 </ul>
             </dd>
             <dt><i class="Hui-iconfont">&#xe63e;</i> 云用户管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
@@ -77,6 +78,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <dd>
                 <ul>
                     <li><a data-href="cloudlogListByKey" data-title="日志列表" href="javascript:void(0)">日志列表</a></li>
+                  
+                </ul>
+            </dd>
+             <dt><i class="Hui-iconfont">&#xe63e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dd>
+                <ul>
+                    <li><a data-href="processList" data-title="进程列表" href="javascript:void(0)">系统进程</a></li>
                   
                 </ul>
             </dd>

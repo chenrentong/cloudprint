@@ -322,4 +322,119 @@ public class PrinterController {
 		return "/device/machinePrint";  
 	}
 	
+	@RequestMapping(value="cloudprintNumber")
+	 public String cloudprintNumber(HttpServletRequest request){
+		Logg.writeDebugLog("进入注册设备编号,cloudprintNumber");
+		boolean result=collectionUsersOperationService.operationRecord("进入设备注册编号！");
+		if(!result){
+			return "/logException";
+		}
+		String timeMin=request.getParameter("timeMin");
+		String timeMax=request.getParameter("timeMax");
+		String page=request.getParameter("page");
+		if(page ==null){
+			page="1";
+		}
+		if(timeMin ==null || timeMax==null){
+			timeMin="";
+			timeMax="";
+		}
+		try{
+			PageBean<CollectionPrinters> pageBean=collectionPrintersService.findRegisterNumberByKey(Integer.parseInt(page), timeMin,timeMax);
+			request.setAttribute("pageBean", pageBean);
+			PageBeanSlidingUtil sliding=new PageBeanSlidingUtil(pageBean.getPage(), pageBean.getTotalPage(), 5);
+			request.setAttribute("curPage", String.valueOf(sliding.getBegin()));
+			request.setAttribute("totalPage", String.valueOf(sliding.getEnd()));
+			request.setAttribute("timeMin", timeMin);
+			request.setAttribute("timeMax", timeMax);
+		}catch(ConversionException e){
+			//转换异常
+			Logg.writeWarnLog("字段转换异常");
+			//设备警报的一种方式；或者自己抛出异常（推荐第二种）
+			/*request.setAttribute("errorCode", DataBaseConstant.DATABASE_ERROR_CODE_2003);*/
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(DataBaseConstant.DATABASE_ERROR_CODE_2003);
+			errorBean.setMessage(DataBaseConstant.DATABASE_ERROR_MESSAGE_DATABASEFIELDERROR);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(DataAccessResourceFailureException e){
+			//无法连接数据库
+			Logg.writeWarnLog("数据库连接超时");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(DataBaseConstant.DATABASE_ERROR_CODE_2002);
+			errorBean.setMessage(DataBaseConstant.DATABASE_ERROR_MESSAGE_DATABASEOUTTIME);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(org.springframework.data.mongodb.UncategorizedMongoDbException e){
+			Logg.writeWarnLog("数据库授权出现异常");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode("2007");
+			errorBean.setMessage("数据库授权出现异常");
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(DataAccessException e){
+			//运行时出现异常
+			Logg.writeWarnLog("数据库运行时出现异常");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(DataBaseConstant.DATABASE_ERROR_CODE_2005);
+			errorBean.setMessage(DataBaseConstant.DATABASE_ERROR_MESSAGE_DATABASERUNERROR);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(Exception e){
+			//出现了其他异常
+			Logg.writeWarnLog("出现了其他异常");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(EquipmentConstant.EQUIPMENT_ERROR_CODE_3002);
+			errorBean.setMessage(EquipmentConstant.EQUIPMENT_ERROR_MESSAGE_OTHERERROR);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}	
+		return "/device/cloudprintNumber";  
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="cloudprintNumberDel",method=RequestMethod.POST,produces="application/json;charset=utf-8")
+	 public String cloudprintNumberDel(HttpServletRequest request,String id){
+		Logg.writeDebugLog("进入注册编号删除,cloudprintDel");
+		boolean result=false;
+		String[] ids=id.split(",");	//批量删除
+		if(ids.length>1){
+			boolean userlog=collectionUsersOperationService.operationRecord("批量删除了注册编号！");	
+			if(!userlog){
+				return JsonTransform.loginJsonTransform(CommitConstant.LOGRECORDFAILED,CommitConstant.LOGRECORDFAILEDMSG,null);
+			}
+		}else{
+			boolean userlog=collectionUsersOperationService.operationRecord("删除了注册编号！");
+			if(!userlog){
+				return JsonTransform.loginJsonTransform(CommitConstant.LOGRECORDFAILED,CommitConstant.LOGRECORDFAILEDMSG,null);
+			}
+		}	
+		for(String id1:ids){
+			try{
+				result=collectionPrintersService.deletePrinters(id1);
+				if(!result){
+					
+					return JsonTransform.loginJsonTransform(CommitConstant.OPERATIONDELETEFAILURE,CommitConstant.OPERATIONDELETEFAILUREMSG,null);
+				}
+			}catch(Exception e){
+				
+				e.printStackTrace();
+				return JsonTransform.loginJsonTransform(CommitConstant.SYSTEMERROR,CommitConstant.SYSTEMERRORMSG,null);
+			}
+		}
+			
+		return JsonTransform.loginJsonTransform(CommitConstant.OPERATIONDELETESUCCESSFUL,CommitConstant.OPERATIONDELETESUCCESSFULMSG,null);
+			
+	}
+	
+	@RequestMapping(value="projectManage")
+	 public String projectManage(HttpServletRequest request){
+		Logg.writeDebugLog("进入项目管理,projectManage");
+		boolean result=collectionUsersOperationService.operationRecord("进入项目管理！");
+		if(!result){
+			return "/logException";
+		}
+		return "/device/projectManage";  
+	}
+	
 }

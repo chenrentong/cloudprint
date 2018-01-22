@@ -179,7 +179,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	$("#isInternet").hide();
 	var type="";
   	function budgetTypeSelect(val){
-  		if(val==1){
+  		if(val==0){
   			$("#isShare").hide();
   		}else{
   			$("#isShare").show();

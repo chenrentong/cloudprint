@@ -206,4 +206,12 @@ public class CollectionPrintersPoolService {
 		return verter;
 
 	}
+	
+	public boolean isPrinterPoolEnough(int count){
+		int i=collectionPrintersPoolDao.findAllCount();
+		if(count<=i){
+			return true;
+		}
+		return false;
+	}
 }

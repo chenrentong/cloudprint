@@ -83,10 +83,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			<div class="row page">
 			 <div class="col-6 col-offset-5 printers-page">
 		        <div class="page">   	
+		        	
 					<c:if test="${pageBean.page!=1}">
+						<span ><a href="clouduserOperation?page=1&key=${key}">首页</a></span> 
 						<span ><a href="clouduserOperation?page=${pageBean.page-1}&key=${key}">上一页</a></span>
 					</c:if>
 					<c:if test="${pageBean.page==1}">
+						<span >首页</span>
 						<span >上一页</span>
 					</c:if> 
 					
@@ -106,10 +109,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		             
 					 <c:if test="${pageBean.page!=pageBean.totalPage}">
 						<span ><a href="clouduserOperation?page=${pageBean.page+1}&key=${key}">下一页</a></span>
+						<span ><a href="clouduserOperation?page=${pageBean.totalPage }&key=${key}">尾页</a></span> 
 					</c:if>
 					<c:if test="${pageBean.page == pageBean.totalPage}">
 						<span >下一页</span>
+						<span >尾页</span>
 					</c:if> 
+					
 		        </div>
     		</div>
 		</div>
