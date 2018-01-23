@@ -90,7 +90,7 @@ public class CollectionPrintersService {
 		}
 		return result;
 	}
-<<<<<<< HEAD
+
 	/**
 	 * 查询全部已经记录过的设备
 	 * @param startTime2
@@ -133,9 +133,7 @@ public class CollectionPrintersService {
 		return pageBean;
 	}
 	
-=======
 
->>>>>>> branch 'master' of https://github.com/chenrentong/cloudprint.git
 	public PageBean<CollectionPrinters> findRegisterNumberByKey(int page,
 			String timeMin, String timeMax) throws ParseException {
 		PageBean<CollectionPrinters> pageBean = new PageBean<CollectionPrinters>();
