@@ -38,11 +38,7 @@ public class CollectionPrintersDao {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("number").regex(".*?" +number+ ".*?")); 
 		query.addCriteria(Criteria.where("alive").is(alive));
-<<<<<<< HEAD
-		query.addCriteria(Criteria.where("info").ne(null)) ;
-=======
 		query.addCriteria(Criteria.where("info").ne(null)) ; 
->>>>>>> branch 'master' of https://github.com/chenrentong/cloudprint.git
 	    query.skip(begin);// 从那条记录开始
 	    query.limit(limit);// 取多少条记录
 		List<CollectionPrinters> list= getMongoTemplate().find(query, CollectionPrinters.class); 	
@@ -53,11 +49,8 @@ public class CollectionPrintersDao {
 		Query query = new Query();
 		query.addCriteria(Criteria.where("number").regex(".*?" +number+ ".*?")); 
 		query.addCriteria(Criteria.where("alive").is(alive));
-<<<<<<< HEAD
-		query.addCriteria(Criteria.where("info").ne(null)) ;
-=======
 		query.addCriteria(Criteria.where("info").ne(null)) ; 
->>>>>>> branch 'master' of https://github.com/chenrentong/cloudprint.git
+
 	    return (int) mongoTemplate.count(query, CollectionPrinters.class); 
 	}
 	
@@ -130,79 +123,6 @@ public class CollectionPrintersDao {
 		
 		getMongoTemplate().insert(printer);     
 	}
-<<<<<<< HEAD
-	public int findRegisterAllCount() {
-		Query query = new Query();	
-		query.addCriteria(Criteria.where("info").is(null));  
-		return (int) mongoTemplate.count(query, CollectionPrinters.class); 
-	}
-
-	public List<CollectionPrinters> findRegisterAllNumber(String sortKey,
-			boolean sort, int begin, int limit) {
-		Query query = new Query();
-		
-		if(sort){
-			query.with(new Sort(Direction.ASC, sortKey));
-		}else{
-			query.with(new Sort(Direction.DESC, sortKey));
-		}
-		query.addCriteria(Criteria.where("info").is(null));  
-	    query.skip(begin);// 从那条记录开始
-	    query.limit(limit);// 取多少条记录
-		List<CollectionPrinters> list= getMongoTemplate().find(query, CollectionPrinters.class); 	
-		return list;
-	}
-
-	public int findRegisterAllCountByDate(Date ...times) {
-		Query query = new Query();
-		query.addCriteria(Criteria.where("info").is(null));  
-		if(times.length ==4){
-			
-			query.addCriteria(Criteria.where("reg_date").lte(times[3])); 	//小于等于
-		}
-		else if(times.length ==3){
-			
-			query.addCriteria(Criteria.where("reg_date").gte(times[2])); 	//大于等于
-		}	
-		else {
-			query.addCriteria(Criteria.where("reg_date").gte(times[0])	//大于等于
-					.lte(times[1])); 	//小于等于
-		}
-
-	    return (int) mongoTemplate.count(query, CollectionPrinters.class);	
-	}
-
-	public List<CollectionPrinters> findRegisterAllPoolByDate(String sortKey,boolean sort,int begin,int limit,Date ...times) {
-		Query query = new Query();
-		query.addCriteria(Criteria.where("info").is(null));  
-		if(sort){
-			query.with(new Sort(Direction.ASC, sortKey));
-		}else{
-			query.with(new Sort(Direction.DESC, sortKey));
-		}
-
-		if(times.length ==4){
-			
-			query.addCriteria(Criteria.where("reg_date").lte(times[3])); 	//小于等于
-		}
-		else if(times.length ==3){
-			
-			query.addCriteria(Criteria.where("reg_date").gte(times[2])); 	//大于等于
-		}	
-		else {
-			query.addCriteria(Criteria.where("reg_date").gte(times[0])	//大于等于
-					.lte(times[1])); 	//小于等于
-		}
-
-		query.skip(begin);// 从那条记录开始
-	    query.limit(limit);// 取多少条记录
-		List<CollectionPrinters> list= getMongoTemplate().find(query, CollectionPrinters.class); 
-		return list;
-	}
-	
-
-	
-=======
 
 	public int findRegisterAllCount() {
 		Query query = new Query();	
@@ -272,5 +192,5 @@ public class CollectionPrintersDao {
 		List<CollectionPrinters> list= getMongoTemplate().find(query, CollectionPrinters.class); 
 		return list;
 	}
->>>>>>> branch 'master' of https://github.com/chenrentong/cloudprint.git
+	
 }
