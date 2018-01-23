@@ -1,6 +1,10 @@
 package com.dascom.cloudprint.controller;
 
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +14,13 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.dascom.cloudprint.common.CommitConstant;
 import com.dascom.cloudprint.common.DataBaseConstant;
 import com.dascom.cloudprint.common.EquipmentConstant;
+import com.dascom.cloudprint.entity.auth.CollectionUsers;
 import com.dascom.cloudprint.entity.device.CollectionIdPool;
 import com.dascom.cloudprint.entity.device.CollectionPrinters;
 import com.dascom.cloudprint.service.CollectionPrintersPoolService;
@@ -320,6 +326,245 @@ public class PrinterController {
 			return "/logException";
 		}
 		return "/device/machinePrint";  
+	}
+	
+	
+	/**
+	 * 查询全部打印机设备  
+	 * @param request
+	 * @param startTime
+	 * @param endTime
+	 * @param like
+	 * @param pageNumber
+	 * @param pageSize
+	 * @return
+	 */
+	@RequestMapping(value="printList")
+	public String  printList(HttpServletRequest request,String startTime,String endTime,String like, @RequestParam(value="", defaultValue="1") Integer pageNumber,@RequestParam(value="",defaultValue="8")Integer pageSize){
+		Logg.writeDebugLog("进入云设备监控,cloudprintListByKeyAndLine");
+		boolean result=collectionUsersOperationService.operationRecord("进入设备列表！");
+		if(!result){
+			return "/logException";
+		}
+		request.setAttribute("startTime", startTime);
+		request.setAttribute("endTime", endTime);
+		request.setAttribute("like", like);
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");//小写的mm表示的是分钟   
+		PageBean<CollectionPrinters> pageBean=null;
+		try{
+			Date startTime2 =startTime!=null&&!"".equals(startTime)?sdf.parse(startTime):null;
+			Date endTime2 =endTime!=null&&!"".equals(endTime)?sdf.parse(endTime):null;
+			
+			pageBean=collectionPrintersService.findPrinterBylineAndKey(startTime2, endTime2, like,pageNumber,pageSize);
+			//监控每个设备的状态
+			request.setAttribute("errorCode", EquipmentConstant.EQUIPMENT_ERROR_CODE_3000);
+			request.setAttribute("pageBean", pageBean);
+			PageBeanSlidingUtil sliding=new PageBeanSlidingUtil(pageBean.getPage(), pageBean.getTotalPage(), 5);
+			request.setAttribute("curPage", String.valueOf(sliding.getBegin()));
+			request.setAttribute("totalPage", String.valueOf(sliding.getEnd()));
+		
+		}catch(ConversionException e){
+			//转换异常
+			Logg.writeWarnLog("字段转换异常");
+			//设备警报的一种方式；或者自己抛出异常（推荐第二种）
+			/*request.setAttribute("errorCode", DataBaseConstant.DATABASE_ERROR_CODE_2003);*/
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(DataBaseConstant.DATABASE_ERROR_CODE_2003);
+			errorBean.setMessage(DataBaseConstant.DATABASE_ERROR_MESSAGE_DATABASEFIELDERROR);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(DataAccessResourceFailureException e){
+			//无法连接数据库
+			Logg.writeWarnLog("数据库连接超时");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(DataBaseConstant.DATABASE_ERROR_CODE_2002);
+			errorBean.setMessage(DataBaseConstant.DATABASE_ERROR_MESSAGE_DATABASEOUTTIME);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(org.springframework.data.mongodb.UncategorizedMongoDbException e){
+			Logg.writeWarnLog("数据库授权出现异常");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode("2007");
+			errorBean.setMessage("数据库授权出现异常");
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(DataAccessException e){
+			//运行时出现异常
+			Logg.writeWarnLog("数据库运行时出现异常");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(DataBaseConstant.DATABASE_ERROR_CODE_2005);
+			errorBean.setMessage(DataBaseConstant.DATABASE_ERROR_MESSAGE_DATABASERUNERROR);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(Exception e){
+			//出现了其他异常
+			Logg.writeWarnLog("出现了其他异常");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(EquipmentConstant.EQUIPMENT_ERROR_CODE_3002);
+			errorBean.setMessage(EquipmentConstant.EQUIPMENT_ERROR_MESSAGE_OTHERERROR);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}
+		
+		return "/device/bindingPrintList";
+	}
+	
+	/**
+	 * 
+	 * @param request
+	 */
+	@RequestMapping(value="bindingPrint",produces="application/json;charset=utf-8")
+	@ResponseBody
+	public String  bindingPrint(HttpServletRequest request,String numberList){
+		try {
+			CollectionUsers user =(CollectionUsers) request.getSession().getAttribute("CollectionUsers");
+			List<String> numberList2=user.getDevices();
+			/*String[] numberList2=user.getDevices()!=null&&"".equals(user.getDevices())?user.getDevices().split(","):null;*/
+			String[] numberList1=numberList!=null&&"".equals(numberList)?numberList.split(","):null;
+			/*List<String> list=new ArrayList<String>();*/
+			//把原来的数据加上去 
+			/*if(numberList2!=null){
+				for (String item : numberList2) {
+					list.add(item);
+				}
+			}*/
+			//把新选择的数据加上去 
+			if(numberList1!=null){
+				for (String item : numberList1) {
+					boolean bool=true;
+					for (String listItem : numberList2) {
+						if(listItem.equals(item)){
+							bool=false;
+						}
+					}
+					if(bool==true){
+						numberList2.add(item);
+					}
+				}
+				
+			}
+			user.setDevices(numberList2);
+			request.getSession().setAttribute("CollectionUsers", user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JsonTransform.loginJsonTransform(CommitConstant.OPERATIONUPDATEFAILURE, CommitConstant.OPERATIONUPDATEFAILUREMSG, null);
+		}
+		return JsonTransform.loginJsonTransform(CommitConstant.OPERATIONUPDATESUCCESSFUL, CommitConstant.OPERATIONUPDATESUCCESSFULMSG, null);
+	}
+	
+	@RequestMapping(value="cloudprintNumber")
+	 public String cloudprintNumber(HttpServletRequest request){
+		Logg.writeDebugLog("进入注册设备编号,cloudprintNumber");
+		boolean result=collectionUsersOperationService.operationRecord("进入设备注册编号！");
+		if(!result){
+			return "/logException";
+		}
+		String timeMin=request.getParameter("timeMin");
+		String timeMax=request.getParameter("timeMax");
+		String page=request.getParameter("page");
+		if(page ==null){
+			page="1";
+		}
+		if(timeMin ==null || timeMax==null){
+			timeMin="";
+			timeMax="";
+		}
+		try{
+			PageBean<CollectionPrinters> pageBean=collectionPrintersService.findRegisterNumberByKey(Integer.parseInt(page), timeMin,timeMax);
+			request.setAttribute("pageBean", pageBean);
+			PageBeanSlidingUtil sliding=new PageBeanSlidingUtil(pageBean.getPage(), pageBean.getTotalPage(), 5);
+			request.setAttribute("curPage", String.valueOf(sliding.getBegin()));
+			request.setAttribute("totalPage", String.valueOf(sliding.getEnd()));
+			request.setAttribute("timeMin", timeMin);
+			request.setAttribute("timeMax", timeMax);
+		}catch(ConversionException e){
+			//转换异常
+			Logg.writeWarnLog("字段转换异常");
+			//设备警报的一种方式；或者自己抛出异常（推荐第二种）
+			/*request.setAttribute("errorCode", DataBaseConstant.DATABASE_ERROR_CODE_2003);*/
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(DataBaseConstant.DATABASE_ERROR_CODE_2003);
+			errorBean.setMessage(DataBaseConstant.DATABASE_ERROR_MESSAGE_DATABASEFIELDERROR);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(DataAccessResourceFailureException e){
+			//无法连接数据库
+			Logg.writeWarnLog("数据库连接超时");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(DataBaseConstant.DATABASE_ERROR_CODE_2002);
+			errorBean.setMessage(DataBaseConstant.DATABASE_ERROR_MESSAGE_DATABASEOUTTIME);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(org.springframework.data.mongodb.UncategorizedMongoDbException e){
+			Logg.writeWarnLog("数据库授权出现异常");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode("2007");
+			errorBean.setMessage("数据库授权出现异常");
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(DataAccessException e){
+			//运行时出现异常
+			Logg.writeWarnLog("数据库运行时出现异常");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(DataBaseConstant.DATABASE_ERROR_CODE_2005);
+			errorBean.setMessage(DataBaseConstant.DATABASE_ERROR_MESSAGE_DATABASERUNERROR);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}catch(Exception e){
+			//出现了其他异常
+			Logg.writeWarnLog("出现了其他异常");
+			ErrorBean errorBean=new ErrorBean();
+			errorBean.setCode(EquipmentConstant.EQUIPMENT_ERROR_CODE_3002);
+			errorBean.setMessage(EquipmentConstant.EQUIPMENT_ERROR_MESSAGE_OTHERERROR);
+			request.getSession().setAttribute("errorBean", errorBean);
+			e.printStackTrace();
+		}	
+		return "/device/cloudprintNumber";  
+	}
+	
+	@ResponseBody
+	@RequestMapping(value="cloudprintNumberDel",method=RequestMethod.POST,produces="application/json;charset=utf-8")
+	 public String cloudprintNumberDel(HttpServletRequest request,String id){
+		Logg.writeDebugLog("进入注册编号删除,cloudprintDel");
+		boolean result=false;
+		String[] ids=id.split(",");	//批量删除
+		if(ids.length>1){
+			boolean userlog=collectionUsersOperationService.operationRecord("批量删除了注册编号！");	
+			if(!userlog){
+				return JsonTransform.loginJsonTransform(CommitConstant.LOGRECORDFAILED,CommitConstant.LOGRECORDFAILEDMSG,null);
+			}
+		}else{
+			boolean userlog=collectionUsersOperationService.operationRecord("删除了注册编号！");
+			if(!userlog){
+				return JsonTransform.loginJsonTransform(CommitConstant.LOGRECORDFAILED,CommitConstant.LOGRECORDFAILEDMSG,null);
+			}
+		}	
+		for(String id1:ids){
+			try{
+				result=collectionPrintersService.deletePrinters(id1);
+				if(!result){
+					
+					return JsonTransform.loginJsonTransform(CommitConstant.OPERATIONDELETEFAILURE,CommitConstant.OPERATIONDELETEFAILUREMSG,null);
+				}
+			}catch(Exception e){
+				
+				e.printStackTrace();
+				return JsonTransform.loginJsonTransform(CommitConstant.SYSTEMERROR,CommitConstant.SYSTEMERRORMSG,null);
+			}
+		}
+			
+		return JsonTransform.loginJsonTransform(CommitConstant.OPERATIONDELETESUCCESSFUL,CommitConstant.OPERATIONDELETESUCCESSFULMSG,null);
+			
+	}
+	
+	@RequestMapping(value="projectManage")
+	 public String projectManage(HttpServletRequest request){
+		Logg.writeDebugLog("进入项目管理,projectManage");
+		boolean result=collectionUsersOperationService.operationRecord("进入项目管理！");
+		if(!result){
+			return "/logException";
+		}
+		return "/device/projectManage";  
 	}
 	
 }

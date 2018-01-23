@@ -321,4 +321,18 @@ public class UserController {
 		return "/user/clouduserInfo";
     	
     }
+    
+    @RequestMapping("clouduserEdit")
+	public String clouduserEdit(HttpServletRequest request){
+    	Logg.writeDebugLog("进入用户编辑界面,clouduserInfo");
+    	boolean result=collectionUsersOperationService.operationRecord("进入用户编辑！");
+		if(!result){
+			return "/logException";
+		}
+    	String id=request.getParameter("id");
+    	CollectionUsers user=collectionUsersService.findUserById(id);
+    	request.setAttribute("user", user);
+		return "/user/clouduserEdit";
+    	
+    }
 }
