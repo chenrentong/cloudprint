@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.dascom.cloudprint.dao.CollectionPrintersDao;
+import com.dascom.cloudprint.entity.device.CollectionIdPool;
 import com.dascom.cloudprint.entity.device.CollectionPrinters;
 import com.dascom.cloudprint.util.PageBean;
 
@@ -89,6 +90,7 @@ public class CollectionPrintersService {
 		}
 		return result;
 	}
+<<<<<<< HEAD
 	/**
 	 * 查询全部已经记录过的设备
 	 * @param startTime2
@@ -131,6 +133,9 @@ public class CollectionPrintersService {
 		return pageBean;
 	}
 	
+=======
+
+>>>>>>> branch 'master' of https://github.com/chenrentong/cloudprint.git
 	public PageBean<CollectionPrinters> findRegisterNumberByKey(int page,
 			String timeMin, String timeMax) throws ParseException {
 		PageBean<CollectionPrinters> pageBean = new PageBean<CollectionPrinters>();

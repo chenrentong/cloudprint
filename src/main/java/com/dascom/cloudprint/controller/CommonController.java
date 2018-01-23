@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
+import org.junit.runners.Parameterized.Parameters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -50,11 +52,6 @@ public class CommonController {
 		boolean result=true;
 		Gson gson=new Gson();
 
-		/*if(poolsJson==null || poolsJson.equals("")){
-			dto.setErrorReason("Parameter poolsJson is null!");
-			dto.setFailureNumbers(failureNumbers);
-			return gson.toJson(dto);
-		}*/
 		try{
 			//PoolBatchJudgeParmDto pools = gson.fromJson(poolsJson, PoolBatchJudgeParmDto.class); 
 			if(pools.getNumbers() == null){
@@ -145,6 +142,10 @@ public class CommonController {
 			dto.setErrorReason("Parameter count must greater than zero!");
 			return gson.toJson(dto);
 		}
+		if(!collectionPrintersPoolService.isPrinterPoolEnough(count)){
+			dto.setErrorReason("IdPool record not enough!");
+			return gson.toJson(dto);
+		}
 		try{
 			 list=collectionPrintersPoolService.takePrinterPoolByCount(count);
 			 dto.setNumbers(list);
@@ -165,4 +166,51 @@ public class CommonController {
 		return  gson.toJson(dto);
 	}
 
+	//打开编号池新增exe
+	@ResponseBody
+	@RequestMapping(value="openExe",method=RequestMethod.POST)
+	 public String openExe(HttpServletRequest request){
+		Logg.writeDebugLog("进入打开编号池新增exe,openExe");
+		PrintNumberTakeDto dto=new PrintNumberTakeDto();
+		Gson gson=new Gson();
+		 final Runtime runtime = Runtime.getRuntime();  
+		    Process process = null;    
+		    try {  
+		    	String LocalPath = request.getServletContext().getRealPath("");
+		    	Logg.writeDebugLog("项目目录："+LocalPath);
+		        process = runtime.exec(LocalPath+"\\ds\\IDGenerator.exe");  
+		        process.destroy();
+		    	/* final String command = "notepad";// 记事本  
+		         process = runtime.exec(command);  */
+		    } catch (final Exception e) { 
+		    	e.printStackTrace();
+		        dto.setErrorReason("Error exec!");
+				return gson.toJson(dto);
+		    }
+			return gson.toJson(dto);  
+	}
+	
+	//打开编号池新增exe
+	@ResponseBody
+	@RequestMapping(value="a",method=RequestMethod.POST)
+	 public String a(HttpServletRequest request){
+		Logg.writeDebugLog("进入打开编号池新增exe,openExe");
+		PrintNumberTakeDto dto=new PrintNumberTakeDto();
+		Gson gson=new Gson();
+		 final Runtime runtime = Runtime.getRuntime();  
+		    Process process = null;    
+		    try {  
+		    	String LocalPath = request.getServletContext().getRealPath("");
+		    	Logg.writeDebugLog("项目目录："+LocalPath);
+		        process = runtime.exec(LocalPath+"\\ds\\IDGenerator.exe");  
+		        process.destroy();
+		    	/* final String command = "notepad";// 记事本  
+		         process = runtime.exec(command);  */
+		    } catch (final Exception e) { 
+		    	e.printStackTrace();
+		        dto.setErrorReason("Error exec!");
+				return gson.toJson(dto);
+		    }
+			return gson.toJson(dto);  
+	}
 }

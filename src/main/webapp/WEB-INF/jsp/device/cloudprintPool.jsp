@@ -52,14 +52,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
    <div class="cl pd-5 bg-1 bk-gray mt-20"> 
    <span class="l">
             <a href="javascript:;" onclick="datadel()" class="btn btn-danger radius"><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
-         <!--    <a href="javascript:;" onclick="javascript:;" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加编号</a> -->
+            <!-- <a href="javascript:;" onclick="openExe();" class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加编号</a> -->
         	</span>
     <span class="r">共有数据：<strong>${pageBean.totalCount}</strong> 条</span> 
     </div>
     <table class="table table-border table-bordered table-bg">
         <thead>
         <tr>
-            <th scope="col" colspan="9">剩余编号列表</th>
+            <th scope="col" colspan="9">编号池列表</th>
         </tr>
         <tr class="text-c">
             <th width="5%"><input type="checkbox" name="" value=""></th>
@@ -91,11 +91,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<c:if test="${!empty pageBean.list}">
 			<div class="row page">
 			 <div class="col-6 col-offset-5 printers-page">
-		        <div class="page">        	
+		        <div class="page">   
+		        	   	
 					<c:if test="${pageBean.page!=1}">
+						<span ><a href="cloudprintPool?page=1&timeMin=${timeMin}&timeMax=${timeMax}">首页</a></span>  
 						<span ><a href="cloudprintPool?page=${pageBean.page-1}&timeMin=${timeMin}&timeMax=${timeMax}">上一页</a></span>
 					</c:if>
 					<c:if test="${pageBean.page==1}">
+						<span >首页</span>
 						<span >上一页</span>
 					</c:if> 
 					
@@ -115,10 +118,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		             
 					 <c:if test="${pageBean.page!=pageBean.totalPage}">
 						<span ><a href="cloudprintPool?page=${pageBean.page+1}&timeMin=${timeMin}&timeMax=${timeMax}">下一页</a></span>
+						<span ><a href="cloudprintPool?page=${pageBean.totalPage}&timeMin=${timeMin}&timeMax=${timeMax}">尾页</a></span>   
 					</c:if>
 					<c:if test="${pageBean.page==pageBean.totalPage}">
 						<span >下一页</span>
+						<span >尾页</span>
 					</c:if> 
+					
 		        </div>
     		</div>
 		</div>
@@ -209,6 +215,24 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         }
         id=id.substring(1);
         classify_del(arr,id)
+    }
+    
+    function openExe(){
+    	 $.ajax({
+                type: 'POST',
+                url: 'common/openExe',
+                dataType: 'json',
+               success: function(res){
+               		var result=res.errorReason;
+               		if(result==undefined){
+               		}else{
+               			layer.msg(result,{icon:2,time:2000});
+               		}
+                },
+                error:function(res) {
+					layer.msg("系统错误",{icon:2,time:1500});
+                },
+            });
     }
 </script>
 </body>
