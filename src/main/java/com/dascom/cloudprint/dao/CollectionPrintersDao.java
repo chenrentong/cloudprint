@@ -50,7 +50,6 @@ public class CollectionPrintersDao {
 		query.addCriteria(Criteria.where("number").regex(".*?" +number+ ".*?")); 
 		query.addCriteria(Criteria.where("alive").is(alive));
 		query.addCriteria(Criteria.where("info").ne(null)) ; 
-
 	    return (int) mongoTemplate.count(query, CollectionPrinters.class); 
 	}
 	
