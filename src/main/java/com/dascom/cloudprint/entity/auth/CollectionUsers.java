@@ -24,7 +24,7 @@ public class CollectionUsers {
 	@Indexed(unique = true)
 	private String email;
 	private String mobile;
-	private List<String> devices;
+	private String devices;
 	private Date register_date;
 	private boolean disabled;
 	private String portrait;	//头像
@@ -57,10 +57,11 @@ public class CollectionUsers {
 	}
 	
 	
-	public List<String> getDevices() {
+	
+	public String getDevices() {
 		return devices;
 	}
-	public void setDevices(List<String> devices) {
+	public void setDevices(String devices) {
 		this.devices = devices;
 	}
 	public Date getRegister_date() {

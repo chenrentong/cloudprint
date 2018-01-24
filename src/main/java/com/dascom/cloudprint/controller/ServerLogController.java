@@ -7,6 +7,7 @@ import java.util.Date;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionException;
@@ -45,6 +46,7 @@ public class ServerLogController {
 	 * @return
 	 */
 	@RequestMapping("serverlogList")
+	@RequiresPermissions("admin")
 	public String serverlogList(HttpServletRequest request,String type,String startTime ,String endTime,String level,@RequestParam(value="", defaultValue="1") Integer pageNumber,@RequestParam(value="",defaultValue="20")Integer pageSize){
 		Logg.writeDebugLog("进入日志监控,cloudlogListByKey");
 		boolean result=collectionUsersOperationService.operationRecord("进入日志列表！");

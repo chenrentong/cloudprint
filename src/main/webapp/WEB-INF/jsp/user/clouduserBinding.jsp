@@ -30,68 +30,42 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				<ul class="information_content">
 					<li class="user_information "></li>
 					<li  class="user_information  second"></li>
-					<li class="user_information ">
+					<!-- <li class="user_information ">
 						<label class="lead_name">基本信息</label>					
 					</li>
-					<li class="user_information second"></li>
-					<li  class="user_information  ">
-						<label>用户名</label>
-						<input type="text" value="${user.user_name }" />
-					</li>
-					<li class="user_information second">
-						<label>邮箱</label>
-						<input type="text" value="${user.email }" />
-					</li>
-					<li  class="user_information  ">
-						<label>手机</label>
-						<input type="text" value="${user.mobile }" />
-					</li>
-					<li class="user_information second">
+					<li class="user_information second"></li> -->
+					
+					<%-- <li class="user_information ">
 						<label>拥有的设备</label>
-						<input type="text" value="${user.devices }" />
+						<input type="text" value="${user.devices }" name="devices" />
 						
 					</li>
-					<li class="user_information "></li>
-					<li class="user_information second">
+					<li class="user_information second"></li> --%>
+					<li class="user_information ">
 						<label></label>
-						<input onclick="userInfo('','printList','${vo._id}','1300','600')" class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;绑定设备&nbsp;&nbsp;">
+						<input onclick="userInfo('','printList','${vo._id}','1300','600')" class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;选择设备&nbsp;&nbsp;">
 					</li>
-					<li  class="user_information  ">
-						<label>是否可用</label>
-						<c:if test="${user.disabled }">
-							<input type="text" readonly="readonly" value="是" />
-						</c:if>
-						<c:if test="${!user.disabled }">
-							<input type="text" readonly="readonly" value="否" />
-						</c:if>
-					</li>
-					<li class="user_information second">
-						<label>注册时间</label>
-						<input type="text" value="<fmt:formatDate type="both"  pattern="yyyy-MM-dd HH:mm:ss" value="${user.register_date }" />"/>
-					</li>
+					<li class="user_information second"></li>
 				</ul>
+				
+				<div>
+			<!-- 邮箱列表 -->
+				<label class="al">拥有的设备<br><br><br></label>
+				<textarea   name="devices" class="a">${user.devices }</textarea>
 			</div>
+			</div>
+					
 		</div>
 		
 		
-		<!-----角色------>
+		
+		
+		
 		<div class="leading_official">
 			<div class="representative">
 				<ul class="information_content">
-					<li class="user_information "></li>
-					<li  class="user_information  second"></li>
 					<li class="user_information ">
-						<label class="lead_name">用户角色</label>
-							
-					</li>
-					<li class="user_information second"></li>
-					<li class="user_information ">
-							<label>角色类型</label>
-							<input type="text" value="${user.role.category }"/>
-					</li>
-					<li  class="user_information  second">
-							<label>子类别</label>
-							<input type="text" value="${user.role.role  }"/>
+						<input onclick="edit()" class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;确定&nbsp;&nbsp;">
 					</li>
 				</ul>
 			</div>
@@ -107,7 +81,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 function userInfo(title,url,id,w,h){
     var url=url;
     layer_show(title,url,w,h);
+
 }
+
+//绑定设备
+function edit(){
+	$.ajax({
+        type: "post",
+        url: "clouduserBindingSumbit",
+        data:{"devices":$("[name=devices]").val()},
+        dataType: "json",
+        success: function (date )
+        {
+        	console.log(date);
+           if(date.code='1000'){
+        	   alert(date.msg);
+        	   var index = parent.layer.getFrameIndex(window.name);
+   	        //关闭弹出层
+   	        parent.layer.close(index);
+           }
+           if(date.code!='1000'){
+				alert(date.msg);
+           }
+           
+        },
+        error:function (date) {      
+        	console.log("请求失败！");
+        	
+        }
+     });
+        	
+	
+}
+
 
 </script>
 </html>

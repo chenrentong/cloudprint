@@ -4,6 +4,7 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://shiro.apache.org/tags" prefix="shiro"%>
 <!DOCTYPE HTML>
 <html>
 <head>
@@ -61,8 +62,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <dd>
                 <ul>
                     <li><a data-href="cloudprintListByKeyAndLine" data-title="设备列表" href="javascript:void(0)">设备列表</a></li>
+                    <shiro:hasPermission name="admin">
                     <li><a data-href="cloudprintNumber" data-title="编号注册" href="javascript:void(0)">编号注册</a></li>
                     <li><a data-href="cloudprintPool" data-title="编号池管理" href="javascript:void(0)">编号池管理</a></li>
+                    </shiro:hasPermission>
                     <li><a data-href="machinePrint" data-title="设备打印" href="javascript:void(0)">设备打印</a></li>
                		<!-- <li><a data-href="projectManage" data-title="项目管理" href="javascript:void(0)">项目管理</a></li> -->
                 </ul>
@@ -74,6 +77,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                     <li><a data-href="clouduserOperation" data-title="用户操作统计" href="javascript:void(0)">操作统计</a></li>
                 </ul>
             </dd>
+           <%--  <shiro:hasPermission name="admin">  --%>
             <dt><i class="Hui-iconfont">&#xe63e;</i> 云日志管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
@@ -82,6 +86,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                   	<li><a data-href="serverlogList?type=interface" data-title="接口日志列表" href="javascript:void(0)">接口日志列表</a></li>
                 </ul>
             </dd>
+             <%-- </shiro:hasPermission> --%>
              <dt><i class="Hui-iconfont">&#xe63e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>

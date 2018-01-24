@@ -35,9 +35,20 @@ public class CustomRealm extends AuthorizingRealm {
 		if(user==null) return null;
 		//获取该所拥有的权限
 		List<String> permissions= new ArrayList<String>();
-		//测试数据
-		permissions .add("user");
-		//角色
+		//角色类别
+		if(user.getRole()!=null&&user.getRole().getCategory()!=null&&!"".equals(user.getRole().getCategory())){
+			String[] list=user.getRole().getCategory().split(",");
+			for (String string : list) {
+				permissions.add(string);
+			}
+		}
+		//角色详细
+		if(user.getRole()!=null&&user.getRole().getRole()!=null&&!"".equals(user.getRole().getRole())){
+			String[] list=user.getRole().getRole().split(",");
+			for (String string : list) {
+				permissions.add(string);
+			}
+		}
 		// simpleAuthorizationInfo.setRoles(user.getRolesName()); 
 		SimpleAuthorizationInfo simpleAuthorizationInfo = new SimpleAuthorizationInfo();
 		simpleAuthorizationInfo.addStringPermissions(permissions);

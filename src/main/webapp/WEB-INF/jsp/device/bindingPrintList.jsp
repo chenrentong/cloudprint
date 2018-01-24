@@ -74,7 +74,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
         <tbody>
         <c:forEach var="vo" items="${pageBean.list}" varStatus="status">
         <tr class="text-c">
-            <td><input type="checkbox" value="${vo._id}" name="batch"></td> 
+            <td><input type="checkbox" value="${vo.number}" name="batch"></td> 
             <td>${((pageBean.page - 1) * pageBean.limit+status.index+1)}</td>
             <td>${vo.number }</td>
             <td>
@@ -129,7 +129,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     		</div>
 		</div>
 		</c:if>
-    <input onclick="" class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;绑定设备&nbsp;&nbsp;">
+    <input onclick="binding()" class="btn btn-primary radius" type="button" value="&nbsp;&nbsp;绑定设备&nbsp;&nbsp;">
 </div>
 
 	
@@ -149,15 +149,36 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	//绑定设备
 	function binding(){
 		var chk_value =[]; 
-		$('input[name="test"]:checked').each(function(){ 
+		$('input[name="batch"]:checked').each(function(){ 
 		chk_value.push($(this).val()); 
+		
 		}); 
-		alert(chk_value.length==0 ?'你还没有选择任何内容！':chk_value); 
+		if(chk_value.length==0){
+			alert('你还没有选择任何内容');
+		}else{
+			console.log(chk_value);
+			$.ajax({
+		        type: "get",
+		        url: "bindingPrint",
+		    	data:{'numberList':chk_value+""},
+		        dataType: "json",
+		        success: function (date )
+		        {
+					console.log(date);
+					var index = parent.layer.getFrameIndex(window.name);
+					//关闭弹出层
+					parent.layer.close(index);
+		        },
+		        error:function (date) {      
+		        	console.log("请求失败！");
+		        	var index = parent.layer.getFrameIndex(window.name);
+			        //关闭弹出层
+			        parent.layer.close(index);
+		        }
+		     }); 
+		}
 	}
 
-   
-    
-    
 </script>
 </body>
 </html>

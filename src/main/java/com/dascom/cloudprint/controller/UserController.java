@@ -1,6 +1,9 @@
 package com.dascom.cloudprint.controller;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
@@ -322,17 +325,99 @@ public class UserController {
     	
     }
     
-    @RequestMapping("clouduserEdit")
+    @RequestMapping("clouduserBinding")
 	public String clouduserEdit(HttpServletRequest request){
-    	Logg.writeDebugLog("进入用户编辑界面,clouduserInfo");
-    	boolean result=collectionUsersOperationService.operationRecord("进入用户编辑！");
+    	Logg.writeDebugLog("进入用户绑定打印机界面,clouduserInfo");
+    	boolean result=collectionUsersOperationService.operationRecord("进入用户绑定打印机！");
 		if(!result){
 			return "/logException";
 		}
     	String id=request.getParameter("id");
-    	CollectionUsers user=collectionUsersService.findUserById(id);
-    	request.setAttribute("user", user);
-		return "/user/clouduserEdit";
+    	try {
+    		CollectionUsers user=collectionUsersService.findUserById(id);
+    		CollectionUsers user1 = (CollectionUsers) request.getSession().getAttribute("user");
+    		if(user1==null||!user1.get_id().equals(user.get_id())){
+    			request.getSession().setAttribute("user", user);
+    		}else{
+    			request.getSession().setAttribute("user", user1);
+    		}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "/user/clouduserBinding";
     	
     }
+    
+    
+    /**
+	 * 绑定注册编号到session
+	 * @param request
+	 */
+	@RequestMapping(value="bindingPrint",produces="application/json;charset=utf-8")
+	@ResponseBody
+	public String  bindingPrint(HttpServletRequest request,String numberList){
+		try {
+			CollectionUsers user =(CollectionUsers) request.getSession().getAttribute("user");
+			/*List<String> numberList2=user!=null&&user.getDevices()!=null?user.getDevices():new ArrayList<String>();*/
+			String[] numberList2=user.getDevices()!=null&&!"".equals(user.getDevices())?user.getDevices().split(","):null;
+			String[] numberList1=numberList!=null&&!"".equals(numberList)?numberList.split(","):null;
+			List<String> list=new ArrayList<String>();
+			//把原来的数据加上去 
+			if(numberList2!=null){
+				for (String item : numberList2) {
+					list.add(item);
+				}
+			}
+			//把新选择的数据加上去 
+			if(numberList1!=null){
+				for (String item : numberList1) {
+					boolean bool=true;
+					for (String listItem : list) {
+						if(listItem.equals(item)){
+							bool=false;
+						}
+					}
+					if(bool==true){
+						list.add(item);
+					}
+				}
+				
+			}
+			String devices="";
+			for (String string : list) {
+				devices=devices+","+string;
+			}
+			devices=devices.length()>1?devices.substring(1, devices.length()):null;
+			if(user!=null)
+				user.setDevices(devices);
+			request.getSession().setAttribute("user", user);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JsonTransform.loginJsonTransform(CommitConstant.OPERATIONUPDATEFAILURE, CommitConstant.OPERATIONUPDATEFAILUREMSG, null);
+		}
+		return JsonTransform.loginJsonTransform(CommitConstant.OPERATIONUPDATESUCCESSFUL, CommitConstant.OPERATIONUPDATESUCCESSFULMSG, null);
+	}
+    
+    @RequestMapping(value="clouduserBindingSumbit",produces="application/json;charset=utf-8")
+    @ResponseBody
+    public String clouduserBindingSumbit(HttpServletRequest request ,CollectionUsers user){
+    	Logg.writeDebugLog("用户确定绑定打印机,clouduserInfo");
+    	boolean result=collectionUsersOperationService.operationRecord("用户确定绑定打印机！");
+		if(!result){
+			return JsonTransform.loginJsonTransform(LoginConstant.LOGIN_ERROR_CODE_100004, LoginConstant.LOGIN_ERROR_MESSAGE_FORCELOGOUT, null);//无法获取当前用户的报错.
+		}
+    	try {
+    		CollectionUsers userTo=(CollectionUsers) request.getSession().getAttribute("user");
+    		userTo.setDevices(user.getDevices());
+    		collectionUsersService.updateBindingPrint(userTo);
+    		request.getSession().setAttribute("user", null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return JsonTransform.loginJsonTransform(LoginConstant.LOGIN_ERROR_CODE, LoginConstant.LOGIN_ERROR_MESSAGE, null);
+		}
+    	return JsonTransform.loginJsonTransform(LoginConstant.LOGIN_ERROR_CODE_1000, LoginConstant.LOGIN_SUCCEED_MESSAGE_VALIDATECODE, null);
+    }
+    
+    
+    
 }

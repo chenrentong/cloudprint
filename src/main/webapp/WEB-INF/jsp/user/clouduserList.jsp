@@ -83,7 +83,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
             <td><fmt:formatDate type="both"  pattern="yyyy-MM-dd HH:mm:ss" value="${vo.register_date }" /></td>
             <td>
                <a title="详情" href="javascript:;" onclick="userInfo('用户详情','clouduserInfo','${vo._id}','1300','600')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe665;</i></a>
-               <a title="编辑" href="javascript:;" onclick="userInfo('用户编辑','clouduserEdit','${vo._id}','1500','800')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
+               <a title="绑定打印机" href="javascript:;" onclick="userInfo('绑定打印机','clouduserBinding','${vo._id}','1350','700')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6df;</i></a>
                <a title="删除" href="javascript:;" onclick="classify_del(this,'${vo._id}')" class="ml-5" style="text-decoration:none"><i class="Hui-iconfont">&#xe6e2;</i></a>
             </td>
          </tr>

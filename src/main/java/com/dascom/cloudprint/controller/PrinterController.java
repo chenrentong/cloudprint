@@ -2,6 +2,7 @@ package com.dascom.cloudprint.controller;
 
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -409,48 +410,7 @@ public class PrinterController {
 		return "/device/bindingPrintList";
 	}
 	
-	/**
-	 * 
-	 * @param request
-	 */
-	@RequestMapping(value="bindingPrint",produces="application/json;charset=utf-8")
-	@ResponseBody
-	public String  bindingPrint(HttpServletRequest request,String numberList){
-		try {
-			CollectionUsers user =(CollectionUsers) request.getSession().getAttribute("CollectionUsers");
-			List<String> numberList2=user.getDevices();
-			/*String[] numberList2=user.getDevices()!=null&&"".equals(user.getDevices())?user.getDevices().split(","):null;*/
-			String[] numberList1=numberList!=null&&"".equals(numberList)?numberList.split(","):null;
-			/*List<String> list=new ArrayList<String>();*/
-			//把原来的数据加上去 
-			/*if(numberList2!=null){
-				for (String item : numberList2) {
-					list.add(item);
-				}
-			}*/
-			//把新选择的数据加上去 
-			if(numberList1!=null){
-				for (String item : numberList1) {
-					boolean bool=true;
-					for (String listItem : numberList2) {
-						if(listItem.equals(item)){
-							bool=false;
-						}
-					}
-					if(bool==true){
-						numberList2.add(item);
-					}
-				}
-				
-			}
-			user.setDevices(numberList2);
-			request.getSession().setAttribute("CollectionUsers", user);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return JsonTransform.loginJsonTransform(CommitConstant.OPERATIONUPDATEFAILURE, CommitConstant.OPERATIONUPDATEFAILUREMSG, null);
-		}
-		return JsonTransform.loginJsonTransform(CommitConstant.OPERATIONUPDATESUCCESSFUL, CommitConstant.OPERATIONUPDATESUCCESSFULMSG, null);
-	}
+	
 	
 	@RequestMapping(value="cloudprintNumber")
 	 public String cloudprintNumber(HttpServletRequest request){

@@ -6,9 +6,11 @@ import java.util.List;
 
 
 
+
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 
 import com.dascom.cloudprint.entity.auth.CollectionUserOperation;
 import com.dascom.cloudprint.entity.auth.CollectionUsers;
@@ -59,6 +61,10 @@ public class CollectionUsersDao {
 
 	public void delete(String id) {
 		getMongoTemplate().remove(new Query(Criteria.where("_id").is(id)), CollectionUsers.class);
+	}
+
+	public void updateBindingPrint(CollectionUsers user) {
+		getMongoTemplate().updateMulti (new Query(Criteria.where("_id").is(user.get_id())), new Update().set("devices", user.getDevices()),CollectionUsers.class);  
 	} 
 	
 	

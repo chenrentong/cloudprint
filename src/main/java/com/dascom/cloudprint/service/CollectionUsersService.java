@@ -65,4 +65,8 @@ public class CollectionUsersService {
 		return result;
 
 	}
+
+	public void updateBindingPrint(CollectionUsers user) {
+		collectionUsersDao.updateBindingPrint(user);
+	}
 }
